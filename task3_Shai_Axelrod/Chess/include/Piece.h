@@ -6,7 +6,8 @@
 enum PlayerColor {
 	pWhite,
 	pBlack,
-	pEmpty
+	pEmpty,
+	MAX_PLAYERS_NUM = pEmpty
 };
 
 class Piece {
