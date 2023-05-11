@@ -2,5 +2,5 @@
 #include "Piece.h"
 
 class Queen : public Piece {
-	Rook(Location Loc, PlayerColor color);
+	Queen(Location Loc, PlayerColor color);
 };
