@@ -1,16 +1,16 @@
-
 #include "GameState.h"
-#include <Rook.h>
-#include <EmptyPiece.h>
-#include <Bishop.h>
-#include <Queen.h>
-#include <King.h>
+#include "Rook.h"
+#include "EmptyPiece.h"
+#include "Bishop.h"
+#include "Queen.h"
+#include "King.h"
+#include <memory>
 
 GameState::GameState()
 {
     for (int r = 0; r < ROWS; r++)
     {
-        std::vector<std::unique_ptr<Piece>> row;
+        std::vector<std::shared_ptr<Piece>> row;
         PlayerColor color;
 
         switch (r)
@@ -26,7 +26,7 @@ GameState::GameState()
         }
         
 
-        for (int c = 0; c < COLUMN; c++)
+        for (int c = 0; c < COLUMNS; c++)
         {
             if (r == 0 or r == 7)
             {
@@ -34,30 +34,81 @@ GameState::GameState()
                 {
                 case 0:
                 case 7:
-                    row.push_back(std::make_unique<Rook>(Location{ r, c }, color));
+                    row.push_back(std::make_shared<Rook>(Location{ r, c }, color)); // Rook
+                    break;
+                case 4:
+                    row.push_back(std::make_shared<King>(Location{ r, c }, color)); //King
                     break;
                 case 2:
                 case 5:
-                    row.push_back(std::make_unique<Bishop>(Location{ r, c }, color)); // Bishop
+                    row.push_back(std::make_shared<Bishop>(Location{ r, c }, color)); // Bishop
                     break;
                 case 3:
-                    row.push_back(std::make_unique<Queen>(Location{ r, c }, color)); //Queen
+                    row.push_back(std::make_shared<Queen>(Location{ r, c }, color)); //Queen
                     break;
-                case 4:
-                    row.push_back(std::make_unique<King>(Location{ r, c }, color)); //King
-                    break;
-
                 default:
-                    row.push_back(std::make_unique<EmptyPiece>(Location{ r, c }, pEmpty));
+                    row.push_back(std::make_shared<EmptyPiece>(Location{ r, c }, pEmpty));
                     break;
                 }
             }
             else
             {
-                row.push_back(std::make_unique<EmptyPiece>(Location{ r, c }, color));
+                row.push_back((std::make_shared<EmptyPiece>(Location{ r, c }, color)));
             }
         }
         _board.push_back(row);
     }
 }
 
+bool GameState::isCellInBoard(Location loc) const
+{
+    return 0 <= loc.row && loc.row < ROWS && 0 <= loc.column && loc.column < COLUMNS;
+}
+
+std::shared_ptr<Piece>& GameState::getPiece(Location loc)
+{
+    auto &row = _board[loc.row];
+    return row[loc.column];
+}
+
+Location GameState::getKingLocation(PlayerColor kingColor) const
+{
+    for (auto &row : _board)
+    {
+        for (auto & piece : row)
+        {
+            if (piece->getColor() == kingColor && dynamic_cast<King*>(piece.get()))
+            {
+                return piece->getLocation();
+            }
+        }
+    }
+    return Location{ROWS, COLUMNS};
+}
+
+bool GameState::checkForChess(PlayerColor kingColor)
+{
+    Location kingLoc = getKingLocation(kingColor);
+    PlayerColor other = otherPlayer(kingColor);
+    for (auto& row : _board)
+    {
+        for (auto& piece : row)
+        {
+            if (piece->getColor() == other && piece->is_valid_move(kingLoc, this))
+            {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+void GameState::move(Location src, Location dest)
+{
+    std::shared_ptr<Piece>& movedPiece = getPiece(src);
+
+    movedPiece->move(dest);
+
+    _board[dest.row][dest.column] = movedPiece;
+    _board[src.row][src.column] = std::make_shared<EmptyPiece>(Location{ src.row, src.column }, pEmpty);
+}

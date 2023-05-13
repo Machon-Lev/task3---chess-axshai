@@ -1,10 +1,12 @@
 #pragma once
-#include "Piece.h"
 #include <vector>
-#include <Chess.h>
+#include <memory>
+#include "Chess.h"
+#include "Piece.h"
+#include "Player.h"
 
 constexpr int ROWS = 8;
-constexpr int COLUMN = 8;
+constexpr int COLUMNS = 8;
 
 enum class StatusCode {
   // invalid (e for error) moves
@@ -21,16 +23,18 @@ enum class StatusCode {
 
 };
 
+class Piece;
+
 class GameState {
 private:
-	std::vector<std::vector<std::unique_ptr<Piece>>> _board;
+	std::vector<std::vector<std::shared_ptr<Piece>>> _board;
 
 public:
 	GameState();
 	bool isCellInBoard(Location loc) const;
-	std::unique_ptr<Piece> getPiece(Location loc) const;
-	Location getKingLocation(PlayerColor kingColor) const;
-	bool checkForChess(PlayerColor kingColor) const;
+	std::shared_ptr<Piece>& getPiece(Location loc);
+	Location getKingLocation(PlayerColor kingColor)const;
+	bool checkForChess(PlayerColor kingColor);
 	void move(Location src, Location dest);
 };
 
