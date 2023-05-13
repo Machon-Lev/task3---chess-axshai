@@ -1,27 +1,25 @@
 #pragma once
+#include <vector>
 #include "Location.h"
 #include "Direction.h"
-#include <vector>
+#include "GameState.h"
+#include "Player.h"
 
-enum PlayerColor {
-	pWhite,
-	pBlack,
-	pEmpty,
-	MAX_PLAYERS_NUM = pEmpty
-};
+class GameState;
 
 class Piece {
+protected:
 	std::vector<Direction> _directions;
 	int _maxSteps;
 	Location _location;
-	PlayerColor color;
+	PlayerColor _color;
 	virtual void initDirAndSteps() = 0;
 
 public:
-	Piece(Location Loc, PlayerColor color);
-	bool is_valid_move(Location dest) const;
+	Piece(Location loc, PlayerColor color);
+	bool is_valid_move(Location dest, GameState* gameState) const;
 	void move(Location dest);
 
-	PlayerColor getColor();
-	// Location getLocation();
+	PlayerColor getColor() const;
+	Location getLocation() const;
 };
