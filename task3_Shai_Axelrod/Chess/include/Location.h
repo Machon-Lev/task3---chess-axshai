@@ -14,3 +14,6 @@ Location operator+(const Location& loc1, const Location& loc2);
 Location& operator+=(Location& loc1, const Location& loc2);
 bool operator==(const Location& loc1, const Location& loc2);
 bool operator!=(const Location& loc1, const Location& loc2);
+Location operator-(const Location& loc1, const Location& loc2);
+Location operator/(const Location& loc1, const Location& loc2);
+Location operator*(const Location& loc1, int multiplier);
