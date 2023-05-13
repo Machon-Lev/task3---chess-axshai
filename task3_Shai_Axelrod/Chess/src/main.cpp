@@ -1,10 +1,12 @@
 // Chess 
 #include "Chess.h"
+#include "ChessEngine.h"
 
 int main()
 {
-	string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
-//	string board = "##########K###############################R#############r#r#####";
+	ChessEngine* chessEngine =  ChessEngine::getChessEngine();
+//	string board = "RNBQKBNRPPPPPPPP################################pppppppprnbqkbnr"; 
+	string board = "R#BQKB#R################################################r#bqkb#r";
 	Chess a(board);
 	int codeResponse = 0;
 	string res = a.getInput();
@@ -26,8 +28,7 @@ int main()
 
 		/**/ 
 		{ // put your code here instead that code
-			cout << "code response >> ";
-			cin >> codeResponse;
+			codeResponse = (int)chessEngine->performMove(res);
 		}
 		/**/
 
