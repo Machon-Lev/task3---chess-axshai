@@ -8,11 +8,14 @@
 
 GameState::GameState()
 {
+    //Initialize the chess game board:
     for (int r = 0; r < ROWS; r++)
     {
         std::vector<std::shared_ptr<Piece>> row;
         PlayerColor color;
 
+        // In row 0 are the pieces of the white.
+        // In 7 the are the pieces of the black
         switch (r)
         {
         case 0:
@@ -32,19 +35,23 @@ GameState::GameState()
             {
                 switch (c)
                 {
+                    // columns 0 and 7: Rooks
                 case 0:
                 case 7:
-                    row.push_back(std::make_shared<Rook>(Location{ r, c }, color)); // Rook
+                    row.push_back(std::make_shared<Rook>(Location{ r, c }, color));
                     break;
+                    // column 4: King
                 case 4:
-                    row.push_back(std::make_shared<King>(Location{ r, c }, color)); //King
+                    row.push_back(std::make_shared<King>(Location{ r, c }, color));
                     break;
+                    // column 2 and 5: Bishops
                 case 2:
                 case 5:
-                    row.push_back(std::make_shared<Bishop>(Location{ r, c }, color)); // Bishop
+                    row.push_back(std::make_shared<Bishop>(Location{ r, c }, color));
                     break;
+                    // column 3: Queen
                 case 3:
-                    row.push_back(std::make_shared<Queen>(Location{ r, c }, color)); //Queen
+                    row.push_back(std::make_shared<Queen>(Location{ r, c }, color));
                     break;
                 default:
                     row.push_back(std::make_shared<EmptyPiece>(Location{ r, c }, pEmpty));
@@ -83,6 +90,8 @@ Location GameState::getKingLocation(PlayerColor kingColor) const
             }
         }
     }
+    // if no king on board (this is an illegal situation that shouldn't happen) - 
+    // return an off-board location
     return Location{ROWS, COLUMNS};
 }
 
@@ -90,6 +99,8 @@ bool GameState::checkForChess(PlayerColor kingColor)
 {
     Location kingLoc = getKingLocation(kingColor);
     PlayerColor other = otherPlayer(kingColor);
+    
+    // For each piece of the opponent's color - check if it threatens the king.
     for (auto& row : _board)
     {
         for (auto& piece : row)
@@ -107,8 +118,10 @@ void GameState::move(Location src, Location dest)
 {
     std::shared_ptr<Piece>& movedPiece = getPiece(src);
 
+    // move the piece itself
     movedPiece->move(dest);
 
+    // update the board as well
     _board[dest.row][dest.column] = movedPiece;
     _board[src.row][src.column] = std::make_shared<EmptyPiece>(Location{ src.row, src.column }, pEmpty);
 }
