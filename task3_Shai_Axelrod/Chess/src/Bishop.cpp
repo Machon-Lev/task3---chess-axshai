@@ -8,6 +8,7 @@ Bishop::Bishop(Location loc, PlayerColor color) : Piece(loc, color)
 
 void Bishop::initDirAndSteps()
 {
+	// The bishop can move diagonally in four directions any number of steps.
 	_maxSteps = 7;
 
 	_directions.push_back(Direction{ Up ,Right });

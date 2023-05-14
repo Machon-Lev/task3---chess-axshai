@@ -8,6 +8,7 @@ Queen::Queen(Location loc, PlayerColor color) : Piece(loc, color)
 
 void Queen::initDirAndSteps()
 {
+	// Queen can move to all possible directions any number of steps.
 	_maxSteps = 7;
 	_directions.push_back(Direction{ Up ,HNone });
 	_directions.push_back(Direction{ Down ,HNone });

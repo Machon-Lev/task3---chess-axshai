@@ -8,6 +8,7 @@ King::King(Location loc, PlayerColor color) : Piece(loc, color)
 
 void King::initDirAndSteps()
 {
+	// King can move to all possible directions one step at a time.
 	_maxSteps = 1;
 	_directions.push_back(Direction{ Up ,HNone });
 	_directions.push_back(Direction{ Down ,HNone });
