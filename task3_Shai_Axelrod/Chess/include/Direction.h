@@ -16,7 +16,7 @@ enum  HorizontalDirection
 
 /**
  * @struct Direction
- * @brief Represents a direction in the zoo simulation.
+ * @brief Represents a direction in the chess simulation.
  */
 struct Direction {
 	VerticalDirection vertical;

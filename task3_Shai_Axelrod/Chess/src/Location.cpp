@@ -16,6 +16,7 @@ Location operator-(const Location& loc1, const Location& loc2)
 	return Location{ loc1.row + -1 * loc2.row, loc1.column + -1 * loc2.column };
 }
 
+// Simplifying(reducing) the location.
 Location operator/(const Location& loc1, const Location& loc2)
 {
 	int row = loc2.row != 0 ? loc1.row / abs(loc2.row) : loc1.row;
@@ -27,15 +28,6 @@ Location operator*(const Location& loc1, int multiplier)
 {
 	return Location{ loc1.row * multiplier, loc1.column * multiplier };
 }
-
-/*
-Location& operator/(Location& loc1, const Location& loc2)
-{
-	loc1.row /= loc2.row;
-	loc1.column /= loc2.column;
-	return loc1;
-}
-*/
 
 Location& operator+=(Location& loc1, const Location& loc2)
 {
